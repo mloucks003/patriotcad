@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title></title>
+		{% load static %}
+		<link rel="stylesheet" href="{% static '/dos.css' %}">
+	</head>
+
+<body>
+	
+	<div class="screen">
+	
+
+		<div class="content2 column center center-x">
+            <span class="data">WARNING! WICKED LIFE RP ISSUES SERIOUSE PENELTIES FOR ENTERING A LAW ENFORCMENT DATABASE WITHOUT PERMISSION.
+            </span></label><br>
+            <img src="{% static 'badge.png' %}" /><br>
+			<div class="panel">
+				{% for message in messages %}
+				<p>{{message}}</p>
+				{% endfor %}
+                <h1>REGISTER NEW OFFICER</h1>
+				<form action="/registeraction" method="post">
+					{% csrf_token %}
+					<div class="form-group">
+						<label>Badge#:&nbsp;</label>
+						<input type="text" name="badge" id="badge" value="EX....(1B-00)"/>
+					</div>
+					<div class="form-group">
+						<label>Last Name:&nbsp;&nbsp;</label>
+						<input type="last_name" name="last_name" id="last_name">
+					</div>
+                    <div class="form-group">
+						<label>Email:&nbsp;&nbsp;</label>
+						<input type="email" name="email" id="email">
+					</div>
+					<div class="form-group">
+						<label>Password:</label>
+                        <input type="password" name="password" id="password"><br>
+                    </div>
+                    <div class="form-group">
+						<label>Confirm Password:</label>
+                        <input type="password" name="cpass" id="cpass"><br>
+                    </div>
+					<input type="submit" value="Register Officer">
+					<a href="dashboard">Cancel</a>
+                </form>   
+                        
+					
+					
+				
+			</div>
+		
+
+		<div class="footer">
+			<p>&lt;Shift+F1=Help&gt; &lt;F6=Window&gt; &lt;F2=Subs&gt; &lt;F8=Step&gt;</p>
+		</div>
+	</div>
+</div>
+</body>
+
+</html>

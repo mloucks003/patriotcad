@@ -1,0 +1,28 @@
+Suspect.objects.create(last_name="Michael", first_name="Loucks",alias="mick", address="200 East St",warrant="felony")
+--------convert Suspect id to new context-------------
+new_sus = Suspect.objects.get(id=2)
+------now use context for field value to foreign key----------------
+Vehicle.objects.create(make="Ford", model="Granada", color="red", year="2018",plate="PAR-600", owner=new_sus)
+
+assigned_cop = User.objects.get(id=1)
+
+Call.objects.create(location="210 Melton Dr", description="Armed Suspect", code="1", assigned_officer=assign_cop)
+
+c = User.objects.get(id=5)
+c.aop = "Los Santos"
+c.save()
+
+c = User.objects.get(id=5)
+c.status = "10-8"
+c.save()
+
+---------------------------------
+c = User.objects.get(id=4)
+c.aop = "Los Santos"
+c.save()
+
+c = User.objects.get(id=4)
+c.status = "10-7"
+c.save()
+
+-----------------------------------------

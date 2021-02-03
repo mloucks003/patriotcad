@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title></title>
+		{% load static %}
+		<link rel="stylesheet" href="{% static '/dos.css' %}">
+	</head>
+
+<body>
+	
+	<div class="screen">
+	
+
+		<div class="content2 column center center-x">
+            <span class="data">WARNING! BE SURE TO BROADCAST UPDATED INFORMATION.
+            <img src="{% static 'badge.png' %}" /><br>
+			<div class="panel">
+
+                <h1>Edit Call {{calls.description}}</h1>
+				<form action="/updatecall/{{calls.id}}" method="post">
+					{% csrf_token %}
+						<div class="form-group">
+							<label>Location:&nbsp;</label>
+							<input type="text" placeholder="{{calls.location}}" value="{{calls.location}}">
+						</div>
+						<div class="form-group">
+							<label>Description:&nbsp;&nbsp;</label>
+							<input type="textarea" value="{{calls.description}}">
+						</div>
+						<div class="form-group">
+							<label>Current Status:&nbsp;&nbsp;</label>
+							{{calls.assigned_officer}}
+							<br>
+							<label for="cars">Priority:</label>
+							<select id="priority" name="priority">
+							  <option value="1">1</option>
+							  <option value="2">2</option>
+							  <option value="3">3</option>
+							</select>
+							
+
+							
+						</div>
+						<input type="submit" value="Edit Call">
+						<a href="/dispatchdashboard">Cancel</a>
+					</form>   
+ 
+                        
+					
+					
+				
+			</div>
+		
+
+		<div class="footer">
+			<p>&lt;Shift+F1=Help&gt; &lt;F6=Window&gt; &lt;F2=Subs&gt; &lt;F8=Step&gt;</p>
+		</div>
+	</div>
+</div>
+</body>
+
+</html>

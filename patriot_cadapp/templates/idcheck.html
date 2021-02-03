@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+        <title></title>
+        
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		{% load static %}
+		<link rel="stylesheet" href="{% static '/dos.css' %}">
+	</head>
+
+<body>
+	
+	<div class="screen">
+	
+
+		<div class="content2 column center center-x">
+            <span class="data">WARNING! License/ID Checks must be in accordance with Wicked Life RP regulations.
+            <img src="{% static 'badge.png' %}" /><br>
+			<div class="panel">
+
+                <h1>License/ID Check {{calls.description}}</h1>
+                <div class="panel">
+                    <form name="platecheck" method="POST" action="/idcheck">
+                        {% csrf_token %}
+                        <p>License/ID Check</p>
+                        <div class="form-group">
+                            <label>NAME:</label>
+                            <input type="text" name = "name" id ="name" style="text-transform: uppercase;"/>
+                            <input type="submit" value="CHECK"/>
+                        </div>
+                    </form><br><br>
+                    <div>
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for k in messages %}
+                                <li style ="color: red;">{{k}}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div><br>
+                    <div style="color: yellow;">
+    
+                        {%if ss%}
+                            {%for k in ss%}
+                            
+                            <h1>{{k.name}}</h1>
+
+                                <table>
+                                    <tr>
+                                        <td>Adress:</td>
+                                        <td>{{k.address}}</td>
+                                    </tr>
+                                 <br>
+                                    <tr>
+                                        <td>Alias:</td>
+                                        <td>{{k.alias}}</td>
+                                    </tr>
+                                </table>
+                                 
+                                    <br>
+                                   <h2>Prior LEO contacts:</h2>
+                                   <h4>Citations</h4>
+                                    <ul>
+                                        {%for c in k.citations.all%}
+                                        <li>{{c.charge}}, {{c.created_at}}, {{c.location}}</li>
+                                        {%endfor%}
+                                    </ul>
+                                    <h4>Arrests:</h4>
+                                    <ul>
+                                        {%for a in k.arrests.all%}
+                                        <li>{{a.reason}}, {{a.created_at}}, {{a.circumstances}}</li>
+                                        {%endfor%}
+                                        <h2>Navigation Panel:</h2>
+                                    </ul>
+                                    <a href="/citation/{{k.id}}" style="color: gray;">Create Citation</a>
+                                    <br>
+    
+                                
+                            {%endfor%}
+                        {%endif%}
+                        <a href="/dispatchdashboard" style="color: gray;">Dispatch Dashboard</a>
+                        <br>
+                        <a href="/dashboard" style="color: gray;">Officer Dashboard</a>
+    
+                    </div>
+                    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+                      <script>
+                        $( function() {
+                            
+    
+                            $( "#name" ).autocomplete({
+                                source: "{% url 'autocomplete1'%}"
+                                });
+        } 					);
+      </script>
+    
+                    
+                </div>
+                <h2>{{posts.color}}</h2>
+                <div class="panel2">
+    
+                    
+                </div>
+            </div>
+    
+            <div class="footer">
+                <p>&lt;Shift+F1=Help&gt; &lt;F6=Window&gt; &lt;F2=Subs&gt; &lt;F8=Step&gt;</p>
+            </div>
+        </div>
+
+		<div class="footer">
+			<p>&lt;Shift+F1=Help&gt; &lt;F6=Window&gt; &lt;F2=Subs&gt; &lt;F8=Step&gt;</p>
+		</div>
+	</div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    {% load static %}
+	<link rel="stylesheet" href="{% static '/dos.css' %}">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+
+<body>
+	<h4 style="color: tomato;">ALPHA VERSION</h4>
+	<div class="screen">
+		<div class="menubar">
+			<div class="menu-item">Navigate
+				<div class="menu">
+					<div class="menu-content">
+						<p><a href="/logout" style="color: gray;">Logout</a></p>
+						<p><a href="/" style="color: gray;">Desktop</a></p>
+						<hr />
+					</div>
+				</div>
+			</div>
+			<div class="menu-item">File
+				<div class="menu">
+					<div class="menu-content">
+						<p><a href="/idcheck" style="color: gray">Traffic Citation</a></p>
+						
+						<hr />
+					</div>
+				</div>
+			</div>
+			<div class="menu-item">Help
+				<div class="menu">
+					<div class="menu-content">
+						<p class=10-code><a href="/10codesleo" style="color: gray;">10 Codes</a></p>
+						<p class="seven">Administrative Help</p>
+						<p class="six">Training Manuals</p>
+					</div>
+				
+				</div>
+
+			</div>
+			<div class="menu-item">Search
+				<div class="menu">
+					<div class="menu-content">
+						<p class=10-code><a href="/vcheck" style="color: gray;">Vehicle Registration Check</a></p>
+						<p class="seven"><a href="/idcheck" style="color: gray;">License/ID Check</a></p>
+					</div>
+				
+				</div>
+
+			</div>
+
+			<div class="menu-item">LEO Tools
+				<div class="menu">
+					<div class="menu-content">
+						<p class=10-code style="color: gray;"><a href="/addcall" style="color: gray;">Start Call</a></p>
+						
+					</div>
+				
+				</div>
+
+			</div>
+
+
+			<div class="menu-item"><img src="{% static 'phone1.png' %}"/>FIRE</div>
+			<div class="menu-item"><img src="{% static 'phone1.png' %}"/>EMS</div>
+			<div class="menu-item"><img src="{% static 'phone1.png' %}"/>TOW</div>
+			<div class="menu-item"><img src="{% static 'phone1.png' %}"/>SUPERVISOR</div>
+			<div class="right">
+				<div class="menu-item"><a href="/logout" style="color: red;">Logout</a></div>
+			</div>
+		</div>
+		{{loggedUser.badge}} {{loggedUser.last_name}}
+		<div class="content2 column center center-x">
+			<div class="img">
+			<img src="{% static 'badge.png' %}"/>
+		</div>
+		<h1>ACTIVE CALL LOG</h1>
+		<table style="width:100%">
+			<tr>
+				<th>Location</th>
+				<th>Priority</th> 
+				<th>Quick Description</th>
+				<th>Actions</th>
+			</tr>
+			{% for d in dispatch %}
+			{% if d.code == 1 %}
+				<tr style="background-color: red;">
+					<td> {{d.location}}</td>
+					<td>{{d.code}}</td>
+					<td>{{d.description}}</td>
+					<td><a href="/viewlog/{{d.id}}" style="color:gray;">View</a>
+				</tr>
+			{% elif d.code == 2 %}
+				<tr style="background-color: yellow;">
+					<td> {{d.location}}</td>
+					<td>{{d.code}}</td>
+					<td>{{d.description}}</td>
+					<td><a href="/viewlog/{{d.id}}" style="color: grey;">View</a>
+				</tr>
+			{% elif d.code == 3 %}
+				<tr style="background-color: green;">
+					<td> {{d.location}}</td>
+					<td>{{d.code}}</td>
+				
+					<td>{{d.description}}</td>
+					<td><a href="/viewlog/{{d.id}}" style="color: grey;">View</a>
+				</tr>
+			{% endif %}
+			{% endfor %}
+		</table>
+			<h1>ACTIVE UNITS</h1>
+
+		<table style="width:100%">
+			<tr >
+				<th>UNIT</th>
+				<th>STATUS</th>
+				<th></th>
+			</tr>
+			{% for o in officers%}
+			{%if o.status == "10-8" %}
+			<tr style="background-color: green;">
+				<td>{{o.badge}}, {{o.last_name}}</td>
+				<td><a href="status/{{o.id}}">{{o.status}}</a></td>
+				<td>AVAILIBLE</td>
+			
+			</tr>
+			{%elif o.status == "10-6"%}
+			<tr style="background-color: yellow;">
+				<td>{{o.badge}}, {{o.last_name}}</td>
+				<td><a href="status/{{o.id}}">{{o.status}}</a></td>
+				<td>BREAK</td>
+			</tr>
+			{%elif o.status == "10-7"%}
+			<tr style="background-color: gray;">
+				<td>{{o.badge}}, {{o.last_name}}</td>
+				<td><a href="status/{{o.id}}">{{o.status}}</a></td>
+				<td>UNAVAILIBLE</td>
+			</tr>
+			{%endif%}
+			{% if o.is_authenticated %}
+			<p>Authenticated</p>
+			{% endif %}
+			{%endfor%}
+		</table>
+			<div class="panel1">
+
+				
+			</div>
+		</div>
+
+		<div class="footer">
+			<p>&lt;Shift+F1=Help&gt; &lt;F6=Window&gt; &lt;F2=Subs&gt; &lt;F8=Step&gt;</p>
+		</div>
+	</div>
+</body>
+
+</html>

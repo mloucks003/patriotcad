@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Log</title>  
+        {% load static %}
+        <link rel="stylesheet" href="{% static '/index.css' %}">
+        <link rel="stylesheet" href="dos.css">
+</head>
+<body>
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <div class="jumbotron">
+            <h1>Description:{{log.description}}</h1>
+            <h2>Priority:{{log.code}}</h2>
+            <h3>Location:{{log.location}}</h3>
+            <h4>Officer/Officers on Scene:</h4>
+        </div>
+
+    </div>
+</body>
+</html>

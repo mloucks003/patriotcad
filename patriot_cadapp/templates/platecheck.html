@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title></title>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="dos.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css' %}"> 
+</head>
+
+<body class= "background">
+
+	<div class="screen">
+		<div class="menubar">
+			<div class="menu-item">File
+				<div class="menu">
+					<div class="menu-content">
+						
+					</div>
+				</div>
+			</div>
+			<div class="menu-item">Edit
+				<div class="menu">
+					<div class="menu-content">
+						
+					</div>
+				</div>
+			</div>
+			
+		</div>
+
+		<div class="content2 column center center-x">
+            <img src="{% static 'badge.png' %}" />
+            <br>
+            <h1 class="warning">WARNING</h1>
+            <p class="para">This database search must be in accordance with law. Administrative actions may apply. Do not access this inormation without proper authorization!</p>
+			<br>
+			<div class="panel">
+                <form name="platecheck" method="POST" action="/vcheck">
+					{% csrf_token %}
+                    <p>PLATE CHECK</p>
+					<div class="form-group">
+						<label>PLATE#:</label>
+						<input type="text" name = "plate" id ="plate" style="text-transform: uppercase;"/>
+						<input type="submit" value="CHECK"/>
+					</div>
+				</form><br><br>
+				<div>
+					{% if messages %}
+						<ul class="messages">
+							{% for k in messages %}
+							<li style ="color: red;">{{k}}</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</div><br>
+				<div style="color: yellow;">
+
+					{%if sr%}
+						{%for k in sr%}
+						<h1>{{k.plate}}</h1>
+							<table>
+								<tr>
+									<td>Make:</td>
+									<td>{{k.make}}</td>
+								</tr>
+								<tr>
+									<td>Model:</td>
+									<td>{{k.model}}</td>
+								</tr>
+								<tr>
+									<td>Color:</td>
+									<td>{{k.color}}</td>
+								</tr>
+								<tr>
+									<td>Year:</td>
+									<td>{{k.year}}</td>
+								</tr>
+								<tr>
+									<td>Owner:</td>
+									<td>{{k.owner.name}}</td>
+								</tr>
+								<tr>
+									<td>Registration</td>
+									<td>{{k.registration}}</td>
+								</tr>
+								<tr>
+									<td>Insurance:</td>
+									<td>{{k.insurance}}</td>
+								</tr>
+								<form action="/citation">
+								<input type="button" value="">
+								</form>
+
+							</table>
+						{%endfor%}
+					{%endif%}
+					<a href="/dispatchdashboard" style="color: gray;">Dispatch Dashboard</a>
+					<a href="/dashboard" style="color: gray;">LEO Dashboard</a>
+
+				</div>
+				<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  				<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  				<script>
+					$( function() {
+						
+
+						$( "#plate" ).autocomplete({
+							source: "{% url 'autocomplete'%}"
+							});
+	} 					);
+  </script>
+
+                
+			</div>
+			<h2>{{posts.color}}</h2>
+            <div class="panel2">
+
+				
+			</div>
+		</div>
+
+		<div class="footer">
+			<p>&lt;Shift+F1=Help&gt; &lt;F6=Window&gt; &lt;F2=Subs&gt; &lt;F8=Step&gt;</p>
+		</div>
+	</div>
+</body>
+
+</html>

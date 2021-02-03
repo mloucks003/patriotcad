@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title></title>
+		{% load static %}
+		<link rel="stylesheet" href="{% static '/dos.css' %}">
+	</head>
+
+<body>
+	
+	<div class="screen">
+	
+
+		<div class="content2 column center center-x">
+            <span class="data">REMINDER! ALWAYS DOUBLE CHECK FOR ACCURACY!
+            <img src="{% static 'badge.png' %}" /><br>
+			<div class="panel">
+                <p>Start Emergency Call</p>
+
+					
+                    <form action="/submitcallfire" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Location:&nbsp;</label>
+                            <input type="text" name="location" id="location" input oninput="this.value = this.value.toUpperCase()"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Description:&nbsp;&nbsp;</label>
+                            <input type="description" name="description" id="description" input oninput="this.value = this.value.toUpperCase()"/>
+                        </div>
+                        <p>Priority</p>
+                        <select name="code" id="code">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                
+                        <input type="submit" value="Start Call">
+                        <h2>Navigation Panel:</h2>
+                            
+                            
+                                    <br>
+    
+                                
+                        
+                        <br>
+                        <a href="/firedashboard" style="color: gray;">Fire/EMS Dashboard</a>
+                    </form>   
+                        
+					
+					
+				
+			</div>
+		
+
+		<div class="footer">
+			<p>&lt;Shift+F1=Help&gt; &lt;F6=Window&gt; &lt;F2=Subs&gt; &lt;F8=Step&gt;</p>
+		</div>
+	</div>
+</div>
+</body>
+
+</html>
+
+
+    <form action="/submitcall" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Location:&nbsp;</label>
+            <input type="text" name="location" id="location" input oninput="this.value = this.value.toUpperCase()"/>
+        </div>
+        <div class="form-group">
+            <label>Description:&nbsp;&nbsp;</label>
+            <input type="description" name="description" id="description" input oninput="this.value = this.value.toUpperCase()"/>
+        </div>
+        <p>Priority</p>
+        <select name="code" id="code">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+
+        <input type="submit" value="Start Call">
+        <a href="dashboard">Cancel</a>
+    </form>   
+</body>
+</html>

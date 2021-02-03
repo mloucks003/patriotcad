@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title></title>
+    <link rel="stylesheet" href="dos.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index.css' %}"> 
+</head>
+
+<body class= "background">
+
+	<div class="screen">
+		<div class="menubar">
+
+			<div class="menu-item"><a href="/" style="color: gray;">Desktop</a></div>
+		</div>
+
+		<div class="content2 column center center-x">
+            <img src="{% static 'badge.png' %}" />
+            <br>
+            <h1 class="warning">WARNING</h1>
+            <p class="para">You are accessing a Wicked Server CAD information system, which includes: (1) this computer, (2) this computer network, (3) all computers connected to this network, and (4) all devices and storage media attached to this network or to a computer on this network. This information system is provided for Wicked Government-authorized use only. Criminal penelties apply to anyone who attempts to access without authorization</p>
+			<br>
+			<div class="panel">
+				<form action="logindispatch" method="post">
+					{% csrf_token %}
+					{% for message in messages %}
+					<p style="color: crimson;">{{message}}</p>
+					{% endfor %}
+					<div class="form-group">
+						<label>Username: &nbsp; </label>
+						<input type="text"  name="username" id="username" placeholder="username"/>
+					</div>
+					<div class="form-group">
+						<label>Password:</label>
+						<input type="password" name=password id="password"/>
+					</div>
+					
+						<input type="submit" value="Login">
+					
+				</form>
+			</div>
+		</div>
+
+		<div class="footer">
+			<p>&lt;Shift+F1=Help&gt; &lt;F6=Window&gt; &lt;F2=Subs&gt; &lt;F8=Step&gt;</p>
+		</div>
+	</div>
+</body>
+
+</html>

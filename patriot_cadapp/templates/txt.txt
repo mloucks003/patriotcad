@@ -1,0 +1,7 @@
+this_call = Call.objects.get(id=1)
+this_user = User.objects.get(id=1)	
+    
+# 2 options that do the same thing:
+this_user.calls.add(this_call)		
+# OR
+
