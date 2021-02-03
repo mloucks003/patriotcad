@@ -66,7 +66,7 @@ admin.site.register(A, AAdmin)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('patriot_cadapp.urls')),
+    path('', include('patriot_cadapp.urls'))
     
 
 ]
