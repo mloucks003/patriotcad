@@ -285,9 +285,30 @@ def idcheck(request):
 def submitcitation(request):
     Citation.objects.create(charge=request.POST['charge'], location=request.POST['location'], details=request.POST['details'] ,perp=Suspect.objects.get(id=request.POST['name']))
     return redirect("/idcheck")
-    
 
 
+def ai_dispatcher(request):
+    if request.method == 'POST':
+        user_message = request.POST.get('message')
+
+        # Replace with your Oracle Assistant endpoint
+        oracle_assistant_endpoint = "https://your-oracle-assistant-endpoint"
+
+        # The payload to be sent to Oracle Assistant
+        payload = {
+            "text": user_message,
+            "session": "officer_session"  # Adjust this as per your session management
+        }
+
+        # Send the message to Oracle Assistant
+        response = requests.post(oracle_assistant_endpoint, json=payload)
+
+        # Parse the response from Oracle Assistant
+        ai_response = response.json().get('response')
+
+        return JsonResponse({'message': ai_response})
+
+    return render(request, 'chat.html')
 
 
 

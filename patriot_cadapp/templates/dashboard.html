@@ -74,6 +74,39 @@
 		</div>
 		{{loggedUser.badge}} {{loggedUser.last_name}}
 		<div class="content2 column center center-x">
+        <div id="chatbox">
+    <div id="chatlog">
+        <!-- Chat messages will be appended here -->
+    </div>
+    <input type="text" id="userInput" placeholder="Type your message here..." />
+    <button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+    function sendMessage() {
+        const userInput = document.getElementById("userInput").value;
+
+        if (userInput.trim() === "") return;
+
+        const chatLog = document.getElementById("chatlog");
+        chatLog.innerHTML += "<p><b>Officer:</b> " + userInput + "</p>";
+
+        fetch('/ai_dispatcher', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({ message: userInput })
+        })
+        .then(response => response.json())
+        .then(data => {
+            chatLog.innerHTML += "<p><b>Dispatcher:</b> " + data.message + "</p>";
+            document.getElementById("userInput").value = "";
+        });
+    }
+</script>
+
 			<div class="img">
 			<img src="{% static 'badge.png' %}"/>
 		</div>

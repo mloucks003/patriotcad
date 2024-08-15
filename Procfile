@@ -1,0 +1,1 @@
+web: gunicorn patriot_cadpython manage.py collectstatic
