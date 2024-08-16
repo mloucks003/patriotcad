@@ -23,11 +23,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'p*$%zr6)z!*)y_&b1ji29k85m-6@j9*li0&%n8wqd2a21($gk('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['test.patriotcad.com', '129.153.176.32', '158.101.112.40', 'localhost']
+ALLOWED_HOSTS = ['test.patriotcad.com', '129.153.176.32', '158.101.112.40', 'localhost', '127.0.0.1']
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = FALSE
 
 
 # Application definition
