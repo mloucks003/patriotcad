@@ -33,7 +33,7 @@ urlpatterns = [
     path("clearcallfire/<int:callId>", views.clearcallfire),
     path("addcallfire", views.addcallfire),
     path("changestatusfire/<int:officerId>", views.changestatusfire),
-    path("firestatus<int:officerId>", views.firestatus)
-    
-
+    path("firestatus<int:officerId>", views.firestatus),
+    path('webhook/', views.dialogflow_webhook, name='dialogflow_webhook'),
 ]
+

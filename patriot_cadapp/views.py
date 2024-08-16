@@ -11,6 +11,9 @@ from django.http import JsonResponse
 from django.db.models import Q
 from time import gmtime, strftime
 from .models import Fire
+from django.views.decorators.csrf import csrf_exempt
+import json
+
 def index(request):
     return render(request, "home.html")
 
@@ -311,7 +314,27 @@ def ai_dispatcher(request):
     return render(request, 'chat.html')
 
 
+@csrf_exempt
+def dialogflow_webhook(request):
+    if request.method == 'POST':
+        req = json.loads(request.body)
+        intent_name = req.get('queryResult').get('intent').get('displayName')
 
+        if intent_name == "Plate Check":
+            plate_number = req.get('queryResult').get('parameters').get('plate_number')
 
+            # Depending on how Dialogflow parses it, you might need to handle cases where only a number is returned.
+            if isinstance(plate_number, list):
+                plate_number = "".join(plate_number)  # Convert list to string
 
+            try:
+                vehicle = Vehicle.objects.get(plate=plate_number.upper())
+                response_text = f"Vehicle {vehicle.make} {vehicle.model}, {vehicle.year}, owned by {vehicle.owner.name}."
+            except Vehicle.DoesNotExist:
+                response_text = f"No vehicle found with plate number {plate_number}."
 
+            return JsonResponse({
+                "fulfillmentText": response_text
+            })
+
+    return JsonResponse({"fulfillmentText": "Error processing the request"}, status=400)
