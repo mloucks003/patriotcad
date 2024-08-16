@@ -125,60 +125,67 @@
 
             </section>
 
-            <section class="chatbox-container panel">
-                <div class="chatbox-header">
-                    <h1>Chat with AI Dispatch</h1>
-                    <button class="chatbox-toggle" onclick="toggleChatbox()">−</button>
-                </div>
-                <div id="chatbox" class="chatbox-body">
-                    <div id="chatlog" class="chat-log">
-                        <!-- Chat messages will be appended here -->
-                    </div>
-                    <input type="text" id="userInput" placeholder="Enter command..." />
-                    <button class="button-send" onclick="sendMessage()">Send</button>
-                </div>
-            </section>
-        </main>
-
-      
+           <section class="chatbox-container panel">
+    <div class="chatbox-header">
+        <h1>Chat with AI Dispatch</h1>
+        <button class="chatbox-toggle" onclick="toggleChatbox()">−</button>
     </div>
+    <div id="chatbox" class="chatbox-body">
+        <div id="chatlog" class="chat-log">
+            <!-- Chat messages will be appended here -->
+        </div>
+        <input type="text" id="userInput" placeholder="Enter command..." />
+        <button class="button-send" onclick="sendMessage()">Send</button>
+    </div>
+    </section>
 
     <script>
-        function sendMessage() {
-            const userInput = document.getElementById("userInput").value;
+    function sendMessage() {
+    const userInput = document.getElementById("userInput").value;
 
-            if (userInput.trim() === "") return;
+    if (userInput.trim() === "") return;
 
-            const chatLog = document.getElementById("chatlog");
-            chatLog.innerHTML += "<p><b>Officer:</b> " + userInput + "</p>";
+    const chatLog = document.getElementById("chatlog");
+    chatLog.innerHTML += "<p><b>Officer:</b> " + userInput + "</p>";
 
-            fetch('/ai_dispatcher', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}',
-                },
-                body: JSON.stringify({ message: userInput })
-            })
-            .then(response => response.json())
-            .then(data => {
-                chatLog.innerHTML += "<p><b>Dispatcher:</b> " + data.message + "</p>";
-                document.getElementById("userInput").value = "";
-            });
+    fetch('/webhook/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: JSON.stringify({ message: userInput })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Debugging: Log the entire response to ensure it's coming through correctly
+        console.log(data);
+
+        // Correctly handle the response
+        const dispatcherMessage = data.fulfillmentText || "No response from dispatcher.";
+        chatLog.innerHTML += "<p><b>Dispatcher:</b> " + dispatcherMessage + "</p>";
+        document.getElementById("userInput").value = "";
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        chatLog.innerHTML += "<p><b>Dispatcher:</b> There was an error processing your request.</p>";
+    });
+}
+
+    function toggleChatbox() {
+        const chatbox = document.getElementById('chatbox');
+        const toggleButton = document.querySelector('.chatbox-toggle');
+        if (chatbox.style.display === 'none') {
+            chatbox.style.display = 'block';
+            toggleButton.textContent = '−';
+        } else {
+            chatbox.style.display = 'none';
+            toggleButton.textContent = '+';
         }
-
-        function toggleChatbox() {
-            const chatbox = document.getElementById('chatbox');
-            const toggleButton = document.querySelector('.chatbox-toggle');
-            if (chatbox.style.display === 'none') {
-                chatbox.style.display = 'block';
-                toggleButton.textContent = '−';
-            } else {
-                chatbox.style.display = 'none';
-                toggleButton.textContent = '+';
-            }
-        }
+    }
     </script>
+        </main>
+    </div>
 </body>
 
 </html>
