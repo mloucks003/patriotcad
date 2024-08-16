@@ -1,193 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Services CAD MDT</title>
     {% load static %}
-	<link rel="stylesheet" href="{% static '/dos.css' %}">
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{% static '/dos.css' %}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 
 <body>
-	<h4 style="color: tomato;">ALPHA VERSION</h4>
-	<div class="screen">
-		<div class="menubar">
-			<div class="menu-item">Navigate
-				<div class="menu">
-					<div class="menu-content">
-						<p><a href="/logout" style="color: gray;">Logout</a></p>
-						<p><a href="/" style="color: gray;">Desktop</a></p>
-						<hr />
-					</div>
-				</div>
-			</div>
-			<div class="menu-item">File
-				<div class="menu">
-					<div class="menu-content">
-						<p><a href="/idcheck" style="color: gray">Traffic Citation</a></p>
-						
-						<hr />
-					</div>
-				</div>
-			</div>
-			<div class="menu-item">Help
-				<div class="menu">
-					<div class="menu-content">
-						<p class=10-code><a href="/10codesleo" style="color: gray;">10 Codes</a></p>
-						<p class="seven">Administrative Help</p>
-						<p class="six">Training Manuals</p>
-					</div>
-				
-				</div>
+    <div class="mdt-container">
+        <header class="mdt-header">
+            <div class="logo">
+                <img src="{% static 'police-logo.png' %}" alt="Police Logo">
+            </div>
+            <h4 class="version-label">ALPHA VERSION</h4>
+            <nav class="mdt-menubar">
+                <div class="menu-item">Navigate
+                    <div class="menu">
+                        <div class="menu-content">
+                            <p><a href="/logout">Logout</a></p>
+                            <p><a href="/">Desktop</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item">File
+                    <div class="menu">
+                        <div class="menu-content">
+                            <p><a href="/idcheck">Traffic Citation</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item">Help
+                    <div class="menu">
+                        <div class="menu-content">
+                            <p><a href="/10codesleo">10 Codes</a></p>
+                            <p>Administrative Help</p>
+                            <p>Training Manuals</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item">Search
+                    <div class="menu">
+                        <div class="menu-content">
+                            <p><a href="/vcheck">Vehicle Registration Check</a></p>
+                            <p><a href="/idcheck">License/ID Check</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item">LEO Tools
+                    <div class="menu">
+                        <div class="menu-content">
+                            <p><a href="/addcall">Start Call</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item logout-item"><a href="/logout">Logout</a></div>
+            </nav>
+        </header>
 
-			</div>
-			<div class="menu-item">Search
-				<div class="menu">
-					<div class="menu-content">
-						<p class=10-code><a href="/vcheck" style="color: gray;">Vehicle Registration Check</a></p>
-						<p class="seven"><a href="/idcheck" style="color: gray;">License/ID Check</a></p>
-					</div>
-				
-				</div>
+        <main class="mdt-content">
+            <section class="user-info">
+                <div class="officer-details">
+                    <span>{{loggedUser.badge}} {{loggedUser.last_name}}</span>
+                </div>
+            </section>
 
-			</div>
+            <section class="compact-layout">
+                <div class="left-panel panel">
+                    <h1>Active Call Log</h1>
+                    <table class="call-log">
+                        <thead>
+                            <tr>
+                                <th>Location</th>
+                                <th>Priority</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for d in dispatch %}
+                            <tr class="priority-{{d.code}}">
+                                <td>{{d.location}}</td>
+                                <td>{{d.code}}</td>
+                                <td>{{d.description}}</td>
+                                <td><a href="/viewlog/{{d.id}}" class="button-action">View</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-			<div class="menu-item">LEO Tools
-				<div class="menu">
-					<div class="menu-content">
-						<p class=10-code style="color: gray;"><a href="/addcall" style="color: gray;">Start Call</a></p>
-						
-					</div>
-				
-				</div>
-
-			</div>
-
-
-			<div class="menu-item"><img src="{% static 'phone1.png' %}"/>FIRE</div>
-			<div class="menu-item"><img src="{% static 'phone1.png' %}"/>EMS</div>
-			<div class="menu-item"><img src="{% static 'phone1.png' %}"/>TOW</div>
-			<div class="menu-item"><img src="{% static 'phone1.png' %}"/>SUPERVISOR</div>
-			<div class="right">
-				<div class="menu-item"><a href="/logout" style="color: red;">Logout</a></div>
-			</div>
-		</div>
-		{{loggedUser.badge}} {{loggedUser.last_name}}
-		<div class="content2 column center center-x">
-        <div id="chatbox">
-    <div id="chatlog">
-        <!-- Chat messages will be appended here -->
-    </div>
-    <input type="text" id="userInput" placeholder="Type your message here..." />
-    <button onclick="sendMessage()">Send</button>
+                <div class="right-panel panel">
+    <h1>Active Units</h1>
+    <table class="unit-status">
+        <thead>
+            <tr>
+                <th>Unit</th>
+                <th>Status</th>
+                <th>Availability</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for o in officers %}
+            <tr>
+                <td>{{o.badge}}, {{o.last_name}}</td>
+                <td><a href="status/{{o.id}}" class="button-action">{{o.status}}</a></td>
+                <td>
+                    {% if o.status == '10-8' %}
+                        <span class="status-indicator green">Available</span>
+                    {% elif o.status == '10-6' %}
+                        <span class="status-indicator yellow">Break</span>
+                    {% else %}
+                        <span class="status-indicator red">Unavailable</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
-<script>
-    function sendMessage() {
-        const userInput = document.getElementById("userInput").value;
+            </section>
 
-        if (userInput.trim() === "") return;
+            <section class="chatbox-container panel">
+                <div class="chatbox-header">
+                    <h1>Chat with AI Dispatch</h1>
+                    <button class="chatbox-toggle" onclick="toggleChatbox()">−</button>
+                </div>
+                <div id="chatbox" class="chatbox-body">
+                    <div id="chatlog" class="chat-log">
+                        <!-- Chat messages will be appended here -->
+                    </div>
+                    <input type="text" id="userInput" placeholder="Enter command..." />
+                    <button class="button-send" onclick="sendMessage()">Send</button>
+                </div>
+            </section>
+        </main>
 
-        const chatLog = document.getElementById("chatlog");
-        chatLog.innerHTML += "<p><b>Officer:</b> " + userInput + "</p>";
+      
+    </div>
 
-        fetch('/ai_dispatcher', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}',
-            },
-            body: JSON.stringify({ message: userInput })
-        })
-        .then(response => response.json())
-        .then(data => {
-            chatLog.innerHTML += "<p><b>Dispatcher:</b> " + data.message + "</p>";
-            document.getElementById("userInput").value = "";
-        });
-    }
-</script>
+    <script>
+        function sendMessage() {
+            const userInput = document.getElementById("userInput").value;
 
-			<div class="img">
-			<img src="{% static 'badge.png' %}"/>
-		</div>
-		<h1>ACTIVE CALL LOG</h1>
-		<table style="width:100%">
-			<tr>
-				<th>Location</th>
-				<th>Priority</th> 
-				<th>Quick Description</th>
-				<th>Actions</th>
-			</tr>
-			{% for d in dispatch %}
-			{% if d.code == 1 %}
-				<tr style="background-color: red;">
-					<td> {{d.location}}</td>
-					<td>{{d.code}}</td>
-					<td>{{d.description}}</td>
-					<td><a href="/viewlog/{{d.id}}" style="color:gray;">View</a>
-				</tr>
-			{% elif d.code == 2 %}
-				<tr style="background-color: yellow;">
-					<td> {{d.location}}</td>
-					<td>{{d.code}}</td>
-					<td>{{d.description}}</td>
-					<td><a href="/viewlog/{{d.id}}" style="color: grey;">View</a>
-				</tr>
-			{% elif d.code == 3 %}
-				<tr style="background-color: green;">
-					<td> {{d.location}}</td>
-					<td>{{d.code}}</td>
-				
-					<td>{{d.description}}</td>
-					<td><a href="/viewlog/{{d.id}}" style="color: grey;">View</a>
-				</tr>
-			{% endif %}
-			{% endfor %}
-		</table>
-			<h1>ACTIVE UNITS</h1>
+            if (userInput.trim() === "") return;
 
-		<table style="width:100%">
-			<tr >
-				<th>UNIT</th>
-				<th>STATUS</th>
-				<th></th>
-			</tr>
-			{% for o in officers%}
-			{%if o.status == "10-8" %}
-			<tr style="background-color: green;">
-				<td>{{o.badge}}, {{o.last_name}}</td>
-				<td><a href="status/{{o.id}}">{{o.status}}</a></td>
-				<td>AVAILIBLE</td>
-			
-			</tr>
-			{%elif o.status == "10-6"%}
-			<tr style="background-color: yellow;">
-				<td>{{o.badge}}, {{o.last_name}}</td>
-				<td><a href="status/{{o.id}}">{{o.status}}</a></td>
-				<td>BREAK</td>
-			</tr>
-			{%elif o.status == "10-7"%}
-			<tr style="background-color: gray;">
-				<td>{{o.badge}}, {{o.last_name}}</td>
-				<td><a href="status/{{o.id}}">{{o.status}}</a></td>
-				<td>UNAVAILIBLE</td>
-			</tr>
-			{%endif%}
-			{% if o.is_authenticated %}
-			<p>Authenticated</p>
-			{% endif %}
-			{%endfor%}
-		</table>
-			<div class="panel1">
+            const chatLog = document.getElementById("chatlog");
+            chatLog.innerHTML += "<p><b>Officer:</b> " + userInput + "</p>";
 
-				
-			</div>
-		</div>
+            fetch('/ai_dispatcher', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: JSON.stringify({ message: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                chatLog.innerHTML += "<p><b>Dispatcher:</b> " + data.message + "</p>";
+                document.getElementById("userInput").value = "";
+            });
+        }
 
-		<div class="footer">
-			<p>&lt;Shift+F1=Help&gt; &lt;F6=Window&gt; &lt;F2=Subs&gt; &lt;F8=Step&gt;</p>
-		</div>
-	</div>
+        function toggleChatbox() {
+            const chatbox = document.getElementById('chatbox');
+            const toggleButton = document.querySelector('.chatbox-toggle');
+            if (chatbox.style.display === 'none') {
+                chatbox.style.display = 'block';
+                toggleButton.textContent = '−';
+            } else {
+                chatbox.style.display = 'none';
+                toggleButton.textContent = '+';
+            }
+        }
+    </script>
 </body>
 
 </html>
