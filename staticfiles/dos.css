@@ -32,9 +32,6 @@ html, body {
     border-bottom: 1px solid #444;
 }
 
-.logo img {
-    height: 30px;
-}
 
 .version-label {
     color: #bbbbbb;
@@ -216,4 +213,45 @@ html, body {
 /* Hide chatbox initially */
 #chatbox {
     display: block; /* Change this to 'none' if you want it hidden initially */
+}
+
+/* Call Priority Color Coding */
+.priority-1 {
+    background-color: #ff4c4c; /* High priority - Red */
+    color: #ffffff;
+}
+
+.priority-2 {
+    background-color: #ffa500; /* Medium priority - Orange */
+    color: #ffffff;
+}
+
+.priority-3 {
+    background-color: #28a745; /* Low priority - Green */
+    color: #ffffff;
+}
+
+/* Status Indicators */
+.status-indicator {
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12px;
+    display: inline-block;
+    text-align: center;
+}
+
+.status-indicator.green {
+    background-color: #81c784; /* Softer green for available */
+    color: #ffffff;
+}
+
+.status-indicator.yellow {
+    background-color: #ffb74d; /* Softer yellow for break */
+    color: #000000;
+}
+
+.status-indicator.red {
+    background-color: #e57373; /* Softer red for unavailable */
+    color: #ffffff;
 }
