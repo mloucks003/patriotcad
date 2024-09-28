@@ -255,4 +255,221 @@ html, body {
     background-color: #e57373; /* Softer red for unavailable */
     color: #ffffff;
 }
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Courier New', Courier, monospace;
+}
 
+.crt-container {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    background-color: #3f3f3f;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.crt-screen {
+    width: 100%;
+    height: 100%;
+    background-color: #000080;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid #1a1a1a;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.screen-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    color: #ffffff;
+    overflow-y: auto;
+}
+
+.dos-header {
+    margin-bottom: 10px;
+}
+
+.version-label {
+    color: #ff6347;
+    font-weight: bold;
+    margin: 0;
+    text-align: right;
+}
+
+.menubar {
+    background-color: #008080;
+    display: flex;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.menu-item {
+    position: relative;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.menu-content {
+    display: none;
+    position: absolute;
+    background-color: #000080;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.menu-item:hover .menu-content {
+    display: block;
+}
+
+.menu-content p {
+    margin: 0;
+    padding: 5px 10px;
+}
+
+.menu-content hr {
+    margin: 5px 0;
+    border-color: #ffffff;
+}
+
+.menu-content a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.admin-link {
+    color: #ff0000;
+    text-decoration: none;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.logo-container {
+    margin-bottom: 20px;
+}
+
+.main-logo {
+    max-width: 100%;
+    height: auto;
+}
+
+.disclaimer {
+    background-color: #000080;
+    border: 1px solid #ffffff;
+    padding: 15px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.footer {
+    background-color: #008080;
+    padding: 5px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+/* CRT effect */
+.crt-screen::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .crt-container {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        padding: 10px;
+    }
+
+    .menubar {
+        flex-direction: column;
+    }
+
+    .menu-item {
+        margin-bottom: 5px;
+    }
+
+    .menu-content {
+        position: static;
+    }
+}
+/* Add these styles to your dos.css file */
+
+.crt-container {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    margin: 2.5vh auto;
+    background-color: #3f3f3f;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.crt-screen {
+    width: 100%;
+    height: 100%;
+    background-color: #000080;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid #1a1a1a;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.screen-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Optional: Add a CRT screen effect */
+.crt-screen::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,168 +8,171 @@
     <link rel="stylesheet" href="{% static '/dos.css' %}">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
-
 <body>
-    <div class="mdt-container">
-        <header class="mdt-header">
-            <div class="logo">
-                <img src="{% static 'police-logo.png' %}" alt="Police Logo">
+    <div class="crt-container">
+        <div class="crt-screen">
+            <div class="screen-content">
+                <div class="mdt-container">
+                    <header class="mdt-header">
+                        <div class="logo">
+                            <img src="{% static 'badge.png' %}" alt="Police Logo">
+                        </div>
+                        <h4 class="version-label">ALPHA VERSION</h4>
+                        <nav class="mdt-menubar">
+                            <div class="menu-item">Navigate
+                                <div class="menu">
+                                    <div class="menu-content">
+                                        <p><a href="/logout">Logout</a></p>
+                                        <p><a href="/">Desktop</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="menu-item">File
+                                <div class="menu">
+                                    <div class="menu-content">
+                                        <p><a href="/idcheck">Traffic Citation</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="menu-item">Help
+                                <div class="menu">
+                                    <div class="menu-content">
+                                        <p><a href="/10codesleo">10 Codes</a></p>
+                                        <p>Administrative Help</p>
+                                        <p>Training Manuals</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="menu-item">Search
+                                <div class="menu">
+                                    <div class="menu-content">
+                                        <p><a href="/vcheck">Vehicle Registration Check</a></p>
+                                        <p><a href="/idcheck">License/ID Check</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="menu-item">LEO Tools
+                                <div class="menu">
+                                    <div class="menu-content">
+                                        <p><a href="/addcall">Start Call</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="menu-item logout-item"><a href="/logout">Logout</a></div>
+                        </nav>
+                    </header>
+
+                    <main class="mdt-content">
+                        <section class="user-info">
+                            <div class="officer-details">
+                                <span>{{loggedUser.badge}} {{loggedUser.last_name}}</span>
+                            </div>
+                        </section>
+
+                        <section class="compact-layout">
+                            <div class="left-panel panel">
+                                <h1>Active Call Log</h1>
+                                <table class="call-log">
+                                    <thead>
+                                        <tr>
+                                            <th>Location</th>
+                                            <th>Priority</th>
+                                            <th>Description</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for d in dispatch %}
+                                        <tr class="priority-{{d.code}}">
+                                            <td>{{d.location}}</td>
+                                            <td>{{d.code}}</td>
+                                            <td>{{d.description}}</td>
+                                            <td><a href="/viewlog/{{d.id}}" class="button-action">View</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="right-panel panel">
+                                <h1>Active Units</h1>
+                                <table class="unit-status">
+                                    <thead>
+                                        <tr>
+                                            <th>Unit</th>
+                                            <th>Status</th>
+                                            <th>Availability</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for o in officers %}
+                                        <tr>
+                                            <td>{{o.badge}}, {{o.last_name}}</td>
+                                            <td><a href="status/{{o.id}}" class="button-action">{{o.status}}</a></td>
+                                            <td>
+                                                {% if o.status == '10-8' %}
+                                                    <span class="status-indicator green">Available</span>
+                                                {% elif o.status == '10-6' %}
+                                                    <span class="status-indicator yellow">Break</span>
+                                                {% else %}
+                                                    <span class="status-indicator red">Unavailable</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <section class="chatbox-container panel">
+                            <div class="chatbox-header">
+                                <h1>Chat with AI Dispatch</h1>
+                                <button class="chatbox-toggle" onclick="toggleChatbox()">−</button>
+                            </div>
+                            <div id="chatbox" class="chatbox-body">
+                                <div id="chatlog" class="chat-log">
+                                    <!-- Chat messages will be appended here -->
+                                </div>
+                                <input type="text" id="userInput" placeholder="Enter command..." />
+                                <button class="button-send" onclick="sendMessage()">Send</button>
+                            </div>
+                        </section>
+                    </main>
+                </div>
             </div>
-            <h4 class="version-label">ALPHA VERSION</h4>
-            <nav class="mdt-menubar">
-                <div class="menu-item">Navigate
-                    <div class="menu">
-                        <div class="menu-content">
-                            <p><a href="/logout">Logout</a></p>
-                            <p><a href="/">Desktop</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="menu-item">File
-                    <div class="menu">
-                        <div class="menu-content">
-                            <p><a href="/idcheck">Traffic Citation</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="menu-item">Help
-                    <div class="menu">
-                        <div class="menu-content">
-                            <p><a href="/10codesleo">10 Codes</a></p>
-                            <p>Administrative Help</p>
-                            <p>Training Manuals</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="menu-item">Search
-                    <div class="menu">
-                        <div class="menu-content">
-                            <p><a href="/vcheck">Vehicle Registration Check</a></p>
-                            <p><a href="/idcheck">License/ID Check</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="menu-item">LEO Tools
-                    <div class="menu">
-                        <div class="menu-content">
-                            <p><a href="/addcall">Start Call</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="menu-item logout-item"><a href="/logout">Logout</a></div>
-            </nav>
-        </header>
-
-        <main class="mdt-content">
-            <section class="user-info">
-                <div class="officer-details">
-                    <span>{{loggedUser.badge}} {{loggedUser.last_name}}</span>
-                </div>
-            </section>
-
-            <section class="compact-layout">
-                <div class="left-panel panel">
-                    <h1>Active Call Log</h1>
-                    <table class="call-log">
-                        <thead>
-                            <tr>
-                                <th>Location</th>
-                                <th>Priority</th>
-                                <th>Description</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for d in dispatch %}
-                            <tr class="priority-{{d.code}}">
-                                <td>{{d.location}}</td>
-                                <td>{{d.code}}</td>
-                                <td>{{d.description}}</td>
-                                <td><a href="/viewlog/{{d.id}}" class="button-action">View</a></td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="right-panel panel">
-    <h1>Active Units</h1>
-    <table class="unit-status">
-        <thead>
-            <tr>
-                <th>Unit</th>
-                <th>Status</th>
-                <th>Availability</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for o in officers %}
-            <tr>
-                <td>{{o.badge}}, {{o.last_name}}</td>
-                <td><a href="status/{{o.id}}" class="button-action">{{o.status}}</a></td>
-                <td>
-                    {% if o.status == '10-8' %}
-                        <span class="status-indicator green">Available</span>
-                    {% elif o.status == '10-6' %}
-                        <span class="status-indicator yellow">Break</span>
-                    {% else %}
-                        <span class="status-indicator red">Unavailable</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-            </section>
-
-           <section class="chatbox-container panel">
-    <div class="chatbox-header">
-        <h1>Chat with AI Dispatch</h1>
-        <button class="chatbox-toggle" onclick="toggleChatbox()">−</button>
-    </div>
-    <div id="chatbox" class="chatbox-body">
-        <div id="chatlog" class="chat-log">
-            <!-- Chat messages will be appended here -->
         </div>
-        <input type="text" id="userInput" placeholder="Enter command..." />
-        <button class="button-send" onclick="sendMessage()">Send</button>
     </div>
-    </section>
 
     <script>
     function sendMessage() {
-    const userInput = document.getElementById("userInput").value;
+        const userInput = document.getElementById("userInput").value;
 
-    if (userInput.trim() === "") return;
+        if (userInput.trim() === "") return;
 
-    const chatLog = document.getElementById("chatlog");
-    chatLog.innerHTML += "<p><b>Officer:</b> " + userInput + "</p>";
+        const chatLog = document.getElementById("chatlog");
+        chatLog.innerHTML += "<p><b>Officer:</b> " + userInput + "</p>";
 
-    fetch('/webhook/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}',
-        },
-        body: JSON.stringify({ message: userInput })
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Debugging: Log the entire response to ensure it's coming through correctly
-        console.log(data);
-
-        // Correctly handle the response
-        const dispatcherMessage = data.fulfillmentText || "No response from dispatcher.";
-        chatLog.innerHTML += "<p><b>Dispatcher:</b> " + dispatcherMessage + "</p>";
-        document.getElementById("userInput").value = "";
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        chatLog.innerHTML += "<p><b>Dispatcher:</b> There was an error processing your request.</p>";
-    });
-}
+        fetch('/webhook/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({ message: userInput })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            const dispatcherMessage = data.fulfillmentText || "No response from dispatcher.";
+            chatLog.innerHTML += "<p><b>Dispatcher:</b> " + dispatcherMessage + "</p>";
+            document.getElementById("userInput").value = "";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            chatLog.innerHTML += "<p><b>Dispatcher:</b> There was an error processing your request.</p>";
+        });
+    }
 
     function toggleChatbox() {
         const chatbox = document.getElementById('chatbox');
@@ -184,8 +186,5 @@
         }
     }
     </script>
-        </main>
-    </div>
 </body>
-
 </html>

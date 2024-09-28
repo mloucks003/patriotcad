@@ -1,56 +1,49 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-	<title></title>
-	{% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wicked Life Role Play CAD System</title>
+    {% load static %}
     <link rel="stylesheet" href="{% static '/dos.css' %}">
 </head>
-
 <body>
-	<h4 style="color: tomato;">ALPHA VERSION</h4>
-	<div class="screen">
-		<div class="menubar">
-			<div class="menu-item">Navigate
-				<div class="menu">
-					<div class="menu-content">
-						<p><a href="/login" style="color: grey;">San Andreas State Police</a></p>
-						<p><a href="/dispatchlogin" style="color: grey;">San Andreas Dispatch System</a></p>
-						<p><a href="#"style="color: grey;">Fire/EMS Department</a></p>
-						<p><a href="#"style="color: grey;">Department Of Motor Vehicle(civ)</a></p>
-						<hr />
-						<p>Help</p>
-						<hr />
-						<p>Exit</p>
-					</div>
-				</div>
-			</div>
-			<div class="menu-item"><a href="admin/" style="color: red;">Adminstration</a>
-				<div class="menu">
-			
-				</div>
-			</div>
-			
-			
+    <div class="crt-container">
+        <div class="crt-screen">
+            <div class="screen-content">
+                <header class="dos-header">
+                    <h4 class="version-label">ALPHA VERSION</h4>
+                </header>
 
-			</div>
+                <nav class="menubar">
+                    <div class="menu-item">Navigate
+                        <div class="menu">
+                            <div class="menu-content">
+                                <p><a href="/login">San Andreas State Police</a></p>
+                                <p><a href="/dispatchlogin">San Andreas Dispatch System</a></p>
+                                <p><a href="#">Fire/EMS Department</a></p>
+                                <p><a href="#">Department Of Motor Vehicle (civ)</a></p>
+                                <hr>
+                                <p><a href="#">Help</a></p>
+                                <hr>
+                                <p><a href="/logout">Exit</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item"><a href="/admin/" class="admin-link">Administration</a></div>
+                </nav>
 
-		
-
-		<div class="content2 column center center-x">
-		</div>
-
-		<div class="content2 column center center-x">
-			<div class="img">
-			<img src="{% static 'LSDOJ.png' %}"/>
-		</div>
-		This is a Wicked Life Role Play CAD system, which may be accessed and used only for authorized CAD business by authorized personnel. Unauthorized access or use of this computer system may subject violators to criminal, civil, and/or administrative action.
-
-All information on this CAD system may be intercepted, recorded, read, copied, and disclosed by and to authorized personnel for official purposes, including criminal investigations. Such information includes sensitive data encrypted to comply with confidentiality and privacy requirements. Access or use of this CAD system by any person, whether authorized or unauthorized, constitutes consent to these terms. There is no right of privacy in this system.
-		<div class="footer">
-			<p>&lt;Shift+F1=Help&gt; &lt;F6=Window&gt; &lt;F2=Subs&gt; &lt;F8=Step&gt;</p>
-		</div>
-	</div>
+                <main class="content">
+                    <div class="logo-container">
+                        <img src="{% static 'LSDOJ.png' %}" alt="LSDOJ Logo" class="main-logo">
+                    </div>
+                    <div class="disclaimer">
+                        <p>This is a secure CAD system, which may be accessed and used only for authorized CAD business by authorized personnel. Unauthorized access or use of this computer system may subject violators to criminal, civil, and/or administrative action.</p>
+                        <p>All information on this CAD system may be intercepted, recorded, read, copied, and disclosed by and to authorized personnel for official purposes, including criminal investigations. Such information includes sensitive data encrypted to comply with confidentiality and privacy requirements. Access or use of this CAD system by any person, whether authorized or unauthorized, constitutes consent to these terms. There is no right of privacy in this system.</p>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
 </body>
-
 </html>
