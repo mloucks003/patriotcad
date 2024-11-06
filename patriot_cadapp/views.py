@@ -1,21 +1,61 @@
-
-
-# Create your views here.
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
+from django.views.generic import TemplateView
 from .models import *
-from django.shortcuts import render, redirect, render
 from django.contrib import messages
-from .models import User
-from .models import Vehicle
+from .models import User, Vehicle, Fire
 from django.http import JsonResponse
 from django.db.models import Q
 from time import gmtime, strftime
-from .models import Fire
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login
+from django.views import View
+
 import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+class LoginView(View):
+    def get(self, request):
+        return render(request, "login.html")
+
+    def post(self, request):
+        badge = request.POST.get('badge')
+        password = request.POST.get('password')
+        
+        if not badge or not password:
+            messages.error(request, "Both badge and password are required.")
+            return redirect("login")
+        
+        user = authenticate(request, username=badge, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("dashboard")
+        else:
+            messages.error(request, "Invalid badge or password.")
+            return redirect("login")
+
+login_view = LoginView.as_view()
 
 def index(request):
     return render(request, "home.html")
+
+def desktop(request):
+    return render(request, "desktop.html")
+
+def register(request):
+    return render(request, "register.html")
+
+def criminalcitation(request):
+    return render(request,"criminalcitation.html")
+
+def dispatchlogin(request):
+    return render (request, "dispatchlogin.html")
+
+def tencodesdispatch(request):
+    return render(request, "10codesdispatch.html")
+
+def tencodesleo(request):
+    return render(request, "10codesleo.html")
 
 def dashboard(request):
 
@@ -32,16 +72,7 @@ def dashboard(request):
     }
     return render(request, "dashboard.html",context, )
 
-def desktop(request):
-    return render(request, "desktop.html")
-
-def register(request):
-    return render(request, "register.html")
-
 def citation(request, perpId):
-    
-    
-    
 
     context = {
         "allperps":Suspect.objects.get(id=perpId),
@@ -147,7 +178,7 @@ def vcheck(request):
             else:
                 messages.error(request,"No registration found. Please reference Citation System for citation information")
         else:
-            return HttpResponsRedirect('/vcheck')
+            return HttpResponseRedirect('/vcheck')
             
     return render( request, "platecheck.html")
 
@@ -162,12 +193,6 @@ def changestatus(request, officerId):
     c.status = request.POST["status"]
     c.save()
     return redirect ("/dashboard")
-
-def criminalcitation(request):
-    return render(request,"criminalcitation.html")
-
-def dispatchlogin(request):
-    return render (request, "dispatchlogin.html")
 
 def logindispatch(request):
     
@@ -223,14 +248,8 @@ def dashboardvcheck(request):
             else:
                 messages.error(request,"No registration found. Please reference Citation System for citation information")
         else:
-            return HttpResponsRedirect('/dashboardvcheck')
+            return HttpResponseRedirect('/dashboardvcheck')
     return render(request, "dashboardvcheck.html")
-
-def tencodesdispatch(request):
-    return render(request, "10codesdispatch.html")
-
-def tencodesleo(request):
-    return render(request, "10codesleo.html")
 
 def editcall(request, callId):
     context={
@@ -243,7 +262,6 @@ def editcall(request, callId):
 def firestatus(request):
     return render(request,"editstatusfire.html")
 
-
 def editstatusdispatch(request, officerId):
     c = User.objects.get(id=officerId)
     c.status = request.POST["status"]
@@ -255,7 +273,6 @@ def changestatusfire(request, officerId):
     c.status = request.POST["status"]
     c.save()
     return redirect ("/firedashboard")
-
 
 def statusdispatch(request, officerId):
     context= {
@@ -282,28 +299,12 @@ def idcheck(request):
             else:
                 messages.error(request,"No identification found. Please reference Citation System for citation information")
         else:
-            return HttpResponsRedirect('/idcheck')
+            return HttpResponseRedirect('/idcheck')
     return render(request, "idcheck.html")
 
 def submitcitation(request):
     Citation.objects.create(charge=request.POST['charge'], location=request.POST['location'], details=request.POST['details'] ,perp=Suspect.objects.get(id=request.POST['name']))
     return redirect("/idcheck")
-
-
-
-
-
-import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-
-import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-
-import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def dialogflow_webhook(request):
@@ -356,3 +357,10 @@ def dialogflow_webhook(request):
             return JsonResponse({"fulfillmentText": "Error processing the request"}, status=500)
 
     return JsonResponse({"fulfillmentText": "Invalid request method"}, status=400)
+
+
+
+class TemplatePreviewView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        template_name = kwargs.get('template_name')
+        return render(request, template_name)

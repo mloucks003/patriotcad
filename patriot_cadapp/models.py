@@ -42,7 +42,7 @@ class UserManager(models.Manager):
         logUser = User.objects.filter(badge=postData['badge'])
         # print(logUser)
         if len(logUser) == 0:
-            errors['valid email'] = "Badge number is required. If not registered, please conatct administartion to register"
+            errors['valid email'] = "Badge number is required. If not registered, please contact administration to register"
         #if email is taken already
         
         else:
@@ -61,7 +61,7 @@ class UserManager(models.Manager):
         logDispatch = Dispatcher.objects.filter(user_name=postData['username'])
         # print(logUser)
         if len(logDispatch) == 0:
-            errors['valid username'] = "Username is required. If not registered, please conatct administartion to register"
+            errors['valid username'] = "Username is required. If not registered, please contact administration to register"
         #if email is taken already
         
         else:

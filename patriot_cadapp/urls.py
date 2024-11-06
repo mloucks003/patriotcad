@@ -1,14 +1,15 @@
-from django.urls import path     
+from django.urls import path   
+from .views import LoginView, TemplatePreviewView
 from . import views
 urlpatterns = [
     path('', views.desktop),
-    path('login', views.index),	 
+    path('login/', LoginView.as_view(), name='login'),	 
     path('dashboard', views.dashboard, name='autocomplete'),
     path('register', views.register),
     path('citation/<perpId>', views.citation),
     path('registeraction', views.registeraction),
     path('viewlog/<int:callId>', views.viewlog),
-    path('loginaction', views.loginaction),
+    path('login/loginaction/', LoginView.as_view(), name='login_action'),
     path('logout', views.logout),
     path('addcall', views.addcall),
     path("submitcall", views.submitcall),
@@ -35,5 +36,6 @@ urlpatterns = [
     path("changestatusfire/<int:officerId>", views.changestatusfire),
     path("firestatus<int:officerId>", views.firestatus),
     path('webhook/', views.dialogflow_webhook, name='dialogflow_webhook'),
+    path('preview/<path:template_name>', TemplatePreviewView.as_view(), name='template_preview'),
 ]
 

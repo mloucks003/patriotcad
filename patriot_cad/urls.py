@@ -24,51 +24,10 @@ from patriot_cadapp.models import Fire as F
 from patriot_cadapp.models import Citation as T
 from patriot_cadapp.models import Arrest as A
 
-class UAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(U,UAdmin)
-
-class VAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(V,VAdmin)
-
-class SAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(S,SAdmin)
-
-class CAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(C,CAdmin)
-
-class DAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(D,DAdmin)
-
-class FAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(F,FAdmin)
-
-class TAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(T, TAdmin)
-
-class AAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(A, AAdmin)
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('patriot_cadapp.urls'))
-    
-
 ]
 
-admin.site.site_header='Wicked RP Admin Panel'
+admin.site.site_header = 'Wicked RP Admin Panel'
+
