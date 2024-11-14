@@ -37,5 +37,6 @@ urlpatterns = [
     path("firestatus<int:officerId>", views.firestatus),
     path('webhook/', views.dialogflow_webhook, name='dialogflow_webhook'),
     path('preview/<path:template_name>', TemplatePreviewView.as_view(), name='template_preview'),
+    path('api/user-status/', views.get_leo, name='get_leo'),
+    path('api/call-status/', views.get_calls, name='get_calls'),
 ]
-

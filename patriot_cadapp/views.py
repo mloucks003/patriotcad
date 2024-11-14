@@ -36,6 +36,37 @@ class LoginView(View):
 
 login_view = LoginView.as_view()
 
+def get_leo(request):
+    officers = User.objects.all()
+    
+    # Sort officers: first by active status, then by badge, then by last name
+    officers = sorted(officers, key=lambda o: (o.status != "10-8", o.badge, o.last_name))
+    
+    data = []
+    for officer in officers:
+        data.append({
+            "badge": officer.badge,
+            "last_name": officer.last_name,
+            "status": officer.status 
+        })
+    return JsonResponse(data, safe=False)
+
+def get_calls(request):
+    calls = Call.objects.all()
+
+    # Sort calls: first by priority, then by location
+    calls = sorted(calls, key=lambda c: (c.code, c.location))  # Assuming 'code' represents priority
+
+    data = []
+    for call in calls:
+        data.append({
+            "location": call.location,
+            "description": call.description,
+            "code": call.code,
+            "created_at": call.created_at.strftime("%Y-%m-%d %H:%M:%S")  # Format the created_at timestamp
+        })
+    return JsonResponse(data, safe=False)
+
 def index(request):
     return render(request, "home.html")
 
@@ -210,17 +241,21 @@ def logindispatch(request):
 
 def dispatchdashboard(request):
     if 'loggedUser' not in request.session:
-            messages.error(request, "Log in to view page please.")
-            return redirect("/login")
+        messages.error(request, "Log in to view page please.")
+        return redirect("/login")
+    
     loggedUser = Dispatcher.objects.get(id=request.session['loggedUser'])
 
-    context={
-        'loggedUser':loggedUser,
-        'officers':User.objects.all(),
-        'dispatch' :Call.objects.all(),
-        'fire' : Fire.objects.all()
+    # Sort calls: first by priority (code), then by location
+    dispatch_calls = sorted(Call.objects.all(), key=lambda c: (c.code, c.location))
+
+    context = {
+        'loggedUser': loggedUser,
+        'officers': User.objects.all(),
+        'dispatch': dispatch_calls,  # Use the sorted calls here
+        'fire': Fire.objects.all()
     }
-    return render(request, "dispatchdashboard.html",context)
+    return render(request, "dispatchdashboard.html", context)
 
 def firedashboard(request):
     context={
