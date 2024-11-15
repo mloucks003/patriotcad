@@ -150,6 +150,10 @@ html, body {
     font-size: 14px;
 }
 
+h1 {
+    text-align: center; /* Center the headings */
+}
+
 .chatbox-toggle {
     background: none;
     border: none;
@@ -353,6 +357,19 @@ body {
     color: #ff0000;
     text-decoration: none;
 }
+
+.container {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between columns */
+    margin: 20px; /* Add some margin */
+}
+
+.column {
+    flex: 1; /* Each column takes equal space */
+    margin: 0 10px; /* Add some margin between columns */
+    min-width: 300px; /* Optional: Set a minimum width for better responsiveness */
+}
+
 
 .content {
     display: flex;

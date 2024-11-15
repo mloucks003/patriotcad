@@ -1,5 +1,6 @@
 from django.db import models
-from datetime import date
+from django.utils import timezone
+from datetime import date, time
 import re
 
 
@@ -108,6 +109,8 @@ class User(models.Model):
     badge = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    assigned_to_call = models.BooleanField(default=False)
+    assigned_call = models.ManyToManyField('Call', related_name="call")
     objects =UserManager()
     def __str__ (self):
             return self.badge
@@ -146,8 +149,6 @@ class Warrant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
-
 class Vehicle(models.Model):
     make = models.CharField(max_length=255)
     model= models.CharField(max_length=255)
@@ -164,14 +165,15 @@ class Vehicle(models.Model):
 
 
 # ------------------------------- One To Many----------- Also Many to Many Factor----------------------
-
 class Call(models.Model):
     location = models.CharField(max_length=255)
     description = models.TextField()
     code = models.IntegerField()
-    assigned_officer = models.ManyToManyField(User, related_name="calls")
+    assigned_officer = models.ManyToManyField('User', related_name="calls")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    notes = models.TextField()
+    time_created = models.DateTimeField(default=timezone.now)
 
 class Dispatcher(models.Model):
     user_name= models.CharField(max_length = 255)

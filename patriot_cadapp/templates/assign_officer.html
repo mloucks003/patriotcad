@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assign Officer to Call</title>
+</head>
+<body>
+    <h1>Assign Officer to Call: {{ call.description }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Assign Officer</button>
+    </form>
+    <a href="{% url 'dispatchdashboard' %}">Cancel</a>
+</body>
+</html>

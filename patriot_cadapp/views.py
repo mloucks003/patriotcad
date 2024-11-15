@@ -1,14 +1,15 @@
-from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, get_object_or_404
 from django.views.generic import TemplateView
 from .models import *
 from django.contrib import messages
-from .models import User, Vehicle, Fire
+from .models import User, Vehicle, Fire, Call
 from django.http import JsonResponse
 from django.db.models import Q
 from time import gmtime, strftime
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 from django.views import View
+from .forms import AssignOfficerForm
 
 import json
 from django.http import JsonResponse
@@ -60,12 +61,30 @@ def get_calls(request):
     data = []
     for call in calls:
         data.append({
+            "id": call.id,  # Include the ID here
             "location": call.location,
             "description": call.description,
             "code": call.code,
+            "assigned_officers": [
+                {"badge": officer.badge, "last_name": officer.last_name}
+                for officer in call.assigned_officer.all()
+            ],
             "created_at": call.created_at.strftime("%Y-%m-%d %H:%M:%S")  # Format the created_at timestamp
         })
     return JsonResponse(data, safe=False)
+
+def assign_officer_to_call(request, call_id):
+    call = get_object_or_404(Call, id=call_id)
+    
+    if request.method == 'POST':
+        form = AssignOfficerForm(request.POST, instance=call)
+        if form.is_valid():
+            form.save()  # This will update the assigned_officer field
+            return redirect('dispatchdashboard')  # Redirect to the dashboard or another page
+    else:
+        form = AssignOfficerForm(instance=call)
+
+    return render(request, 'assign_officer.html', {'form': form, 'call': call})
 
 def index(request):
     return render(request, "home.html")
@@ -244,7 +263,7 @@ def dispatchdashboard(request):
         messages.error(request, "Log in to view page please.")
         return redirect("/login")
     
-    loggedUser = Dispatcher.objects.get(id=request.session['loggedUser'])
+    loggedUser = get_object_or_404(Dispatcher, id=request.session['loggedUser'])
 
     # Sort calls: first by priority (code), then by location
     dispatch_calls = sorted(Call.objects.all(), key=lambda c: (c.code, c.location))

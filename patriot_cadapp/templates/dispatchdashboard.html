@@ -6,7 +6,22 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'dos.css' %}">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Basic styles for the layout */
+        .container {
+            display: flex; /* Use flexbox for layout */
+            justify-content: space-between; /* Space between columns */
+            margin: 20px; /* Add some margin */
+        }
+        .column {
+            flex: 1; /* Each column takes equal space */
+            margin: 0 10px; /* Add some margin between columns */
+        }
+        h1 {
+            text-align: center; /* Center the headings */
+        }
+    </style>
 </head>
 
 <body>
@@ -60,112 +75,74 @@
         </div>
 
         {{loggedUser.badge}} {{loggedUser.last_name}}
-        <div class="content2 column center center-x">
-            <div class="img">
-                <img src="{% static 'badge.png' %}"/>
+        <div class="container">
+            <div class="column" id="active-call-log-column">
+                <h1>ACTIVE CALL LOG</h1>
+                <table id="active-call-log" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Location</th>
+                            <th>Priority</th> 
+                            <th>Description</th>
+                            <th>Assigned Officers</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be populated by AJAX -->
+                    </tbody>
+                </table>
             </div>
-            
-            <h1>ACTIVE CALL LOG</h1>
-			<table id="active-call-log" style="width:100%">
-				<thead>
-					<tr>
-						<th>Location</th>
-						<th>Priority</th> 
-						<th>Quick Description</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for d in dispatch %}
-					{% if d.code == 1 %}
-						<tr style="background-color: red;">
-							<td> {{d.location}}</td>
-							<td>{{d.code}}</td>
-							<td>{{d.description}}</td>
-							<td><a href="/viewlog/{{d.id}}" style="color:gray;">View</a>|<a href="clearcall/{{d.id}}" style="color :gray">Clear</a>|<a href="editcall/{{d.id}}" style="color :gray">Edit</a></td>
-						</tr>
-					{% elif d.code == 2 %}
-						<tr style="background-color: yellow;">
-							<td> {{d.location}}</td>
-							<td>{{d.code}}</td>
-							<td>{{d.description}}</td>
-							<td><a href="/viewlog/{{d.id}}" style="color: gray;">View</a>|<a href="clearcall/{{d.id}}" style="color :gray">Clear</a>|<a href="editcall/{{d.id}}" style="color :gray">Edit</a></td>
-						</tr>
-					{% elif d.code == 3 %}
-						<tr style="background-color: green;">
-							<td> {{d.location}}</td>
-							<td>{{d.code}}</td>
-							<td>{{d.description}}</td>
-							<td><a href="/viewlog/{{d.id}}" style="color: gray;">View</a>|<a href="clearcall/{{d.id}}" style="color :gray">Clear</a>|<a href="editcall/{{d.id}}" style="color :gray">Edit</a></td>
-						</tr>
-					{% endif %}
-					{% endfor %}
-				</tbody>
-			</table>
-
-            <h1>ACTIVE LEO</h1>
-            <table id="leo-status-table" style="width:100%">
-                <tr>
-                    <th>UNIT</th>
-                    <th>STATUS</th> 
-                    <th>AOP</th>
-                </tr>
-                {% for o in officers %}
-                {% if o.status == "10-8" %}
-                <tr style="background-color: green;">
-                    <td>{{o.badge}}, {{o.last_name}}</td>
-                    <td><a href="statusdispatch/{{o.id}}" style="text-decoration: none;">{{o.status}}</a></td>
-                    <td>AVAILIBLE</td>
-                </tr>
-                {% elif o.status == "10-6" %}
-                <tr style="background-color: yellow;">
-                    <td>{{o.badge}}, {{o.last_name}}</td>
-                    <td><a href="statusdispatch/{{o.id}}">{{o.status}}</a></td>
-                    <td>BREAK</td>
-                </tr>
-                {% elif o.status == "10-7" %}
-                <tr style="background-color: gray;">
-                    <td>{{o.badge}}, {{o.last_name}}</td>
-                    <td><a href="statusdispatch/{{o.id}}">{{o.status}}</a></td>
-                    <td>UNAVAILIBLE</td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </table>
-
-            <h1>ACTIVE FIRE/EMS</h1>
-            <table style="width:100%">
-                <tr>
-                    <th>UNIT</th>
-                    <th>STATUS</th> 
-                    <th>AOP</th>
-                    <th>Actions</th>
-                </tr>
-                {% for f in fire %}
-                {% if f.status == "10-8" %}
-                <tr style="background-color: green;">
-                    <td>{{f.badge}}, {{f.last_name}}</td>
-                    <td><a href="status/{{f.id}}">{{f.status}}</a></td>
-                    <td>AVAILIBLE</td>
-                    <td><a href="#" style="color: grey;">View</a>|<a href="#" style="color: grey;">Attach</a></td>
-                </tr>
-                {% elif f.status == "10-6" %}
-                <tr style="background-color: yellow;">
-                    <td>{{f.badge}}, {{f.last_name}}</td>
-                    <td><a href="status/{{f.id}}">{{f.status}}</a></td>
-                    <td>BREAK</td>
-                    <td><a href="#" style="color: grey;">View</a>|<a href="#" style="color: grey;">Attach</a></td>
-                </tr>
-                {% elif f.status == "10-7" %}
-                <tr style="background-color: gray;">
-                    <td>{{f.badge}}, {{f.last_name}}</td>
-                    <td><a href="status/{{f.id}}">{{f.status}}</a></td>
-                    <td>UNAVAILIBLE</td>
-                    <td><a href="#" style="color: grey;">View</a>|<a href="#" style="color: grey;">Attach</a></td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </table>
+        
+            <div class="column" id="active-leo-fire-column">
+                <h1>ACTIVE LEO</h1>
+                <table id="leo-status-table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>UNIT</th>
+                            <th>STATUS</th> 
+                            <th>AOP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be populated by AJAX -->
+                    </tbody>
+                </table>
+        
+                <h1>ACTIVE FIRE/EMS</h1>
+                <table style="width:100%">
+                    <tr>
+                        <th>UNIT</th>
+                        <th>STATUS</th> 
+                        <th>AOP</th>
+                        <th>Actions</th>
+                    </tr>
+                    {% for f in fire %}
+                    {% if f.status == "10-8" %}
+                    <tr style="background-color: green;">
+                        <td>{{f.badge}}, {{f.last_name}}</td>
+                        <td><a href="status/{{f.id}}">{{f.status}}</a></td>
+                        <td>AVAILIBLE</td>
+                        <td><a href="#" style="color: grey;">View</a>|<a href="#" style="color: grey;">Attach</a></td>
+                    </tr>
+                    {% elif f.status == "10-6" %}
+                    <tr style="background-color: yellow;">
+                        <td>{{f.badge}}, {{f.last_name}}</td>
+                        <td><a href="status/{{f.id}}">{{f.status}}</a></td>
+                        <td>BREAK</td>
+                        <td><a href="#" style="color: grey;">View</a>|<a href="#" style="color: grey;">Attach</a></td>
+                    </tr>
+                    {% elif f.status == "10-7" %}
+                    <tr style="background-color: gray;">
+                        <td>{{f.badge}}, {{f.last_name}}</td>
+                        <td><a href="status/{{f.id}}">{{f.status}}</a></td>
+                        <td>UNAVAILIBLE</td>
+                        <td><a href="#" style="color: grey;">View</a>|<a href="#" style="color: grey;">Attach</a></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
         </div>
 
         <div class="footer">
@@ -175,7 +152,8 @@
 
     <!-- Inline JavaScript for AJAX -->
     <script>
-		
+        const assignOfficerUrl = "{% url 'assign_officer' 0 %}".replace(/0$/, ''); // Base URL for assigning officer
+    
         function fetchUserStatus() {
             $.ajax({
                 url: "{% url 'get_leo' %}",  // Updated to use the new get_leo view
@@ -183,7 +161,7 @@
                 success: function(data) {
                     // Update the dashboard with the new data
                     let tableBody = $('#leo-status-table tbody'); // Assuming you have a table with this ID
-                    tableBody.empty(); // Clear existing rows
+                    tableBody.empty(); // Clear existing rows but keep the headers
                     data.forEach(function(officer) {
                         let statusColor;
                         if (officer.status === "10-8") {
@@ -203,44 +181,53 @@
                 }
             });
         }
-
-        // Fetch user status every 5 seconds
-        setInterval(fetchUserStatus, 5000);
+    
+        function fetchActiveCalls() {
+            $.ajax({
+                url: "{% url 'get_calls' %}",  // Update to use the new get_active_calls view
+                method: "GET",
+                success: function(data) {
+                    // Update the dashboard with the new data
+                    let tableBody = $('#active-call-log tbody'); // Assuming you have a table with this ID
+                    tableBody.empty(); // Clear existing rows
+                    data.forEach(function(call) {
+                        let priorityColor;
+                        if (call.code == 1) {
+                            priorityColor = "red";
+                        } else if (call.code == 2) {
+                            priorityColor = "yellow";
+                        } else if (call.code == 3) {
+                            priorityColor = "green";
+                        }
+                        let row = `<tr style="background-color: ${priorityColor};">
+                            <td>${call.location}</td>
+                            <td>${call.code}</td>
+                            <td>${call.description}</td>
+                            <td>
+                                ${call.assigned_officers.map(officer => `${officer.badge} ${officer.last_name}`).join(', ')}
+                            </td>
+                            <td>
+                                <a href="/viewlog/${call.id}" style="color:gray;">View</a> |
+                                <a href="clearcall/${call.id}" style="color:gray;">Clear</a> |
+                                <a href="editcall/${call.id}" style="color:gray;">Edit</a> |
+                                <a href="${assignOfficerUrl}${call.id}/" style="color:gray;">Assign Officer</a>
+                            </td>
+                        </tr>`;
+                        tableBody.append(row);
+                    });
+                }
+            });
+        }
+    
+        // Fetch user status and active calls when the page loads
+        $(document).ready(function() {
+            fetchUserStatus();
+            fetchActiveCalls();
+            // Fetch user status and active calls every 5 seconds
+            setInterval(fetchUserStatus, 5000);
+            setInterval(fetchActiveCalls, 5000);
+        });
     </script>
-
-	<script>
-		function fetchActiveCalls() {
-			$.ajax({
-				url: "{% url 'get_calls' %}",  // Update to use the new get_active_calls view
-				method: "GET",
-				success: function(data) {
-					// Update the dashboard with the new data
-					let tableBody = $('#active-call-log tbody'); // Assuming you have a table with this ID
-					tableBody.empty(); // Clear existing rows
-					data.forEach(function(call) {
-						let priorityColor;
-						if (call.code == 1) {
-							priorityColor = "red";
-						} else if (call.code == 2) {
-							priorityColor = "yellow";
-						} else if (call.code == 3) {
-							priorityColor = "green";
-						}
-						let row = `<tr style="background-color: ${priorityColor};">
-							<td>${call.location}</td>
-							<td>${call.code}</td>
-							<td>${call.description}</td>
-							<td><a href="/viewlog/${call.id}" style="color:gray;">View</a>|<a href="clearcall/${call.id}" style="color:gray;">Clear</a>|<a href="editcall/${call.id}" style="color:gray;">Edit</a></td>
-						</tr>`;
-						tableBody.append(row);
-					});
-				}
-			});
-		}
-
-		// Fetch active calls every 5 seconds
-		setInterval(fetchActiveCalls, 5000);
-	</script>
 
 </body>
 

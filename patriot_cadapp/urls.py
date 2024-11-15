@@ -1,6 +1,8 @@
 from django.urls import path   
 from .views import LoginView, TemplatePreviewView
 from . import views
+from .views import assign_officer_to_call
+
 urlpatterns = [
     path('', views.desktop),
     path('login/', LoginView.as_view(), name='login'),	 
@@ -39,4 +41,5 @@ urlpatterns = [
     path('preview/<path:template_name>', TemplatePreviewView.as_view(), name='template_preview'),
     path('api/user-status/', views.get_leo, name='get_leo'),
     path('api/call-status/', views.get_calls, name='get_calls'),
+    path('assign_officer/<int:call_id>/', assign_officer_to_call, name='assign_officer'),
 ]
