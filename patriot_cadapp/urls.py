@@ -1,7 +1,7 @@
 from django.urls import path   
 from .views import LoginView, TemplatePreviewView
 from . import views
-from .views import assign_officer_to_call
+from .views import assign_officer_to_call, subjectcheck
 
 urlpatterns = [
     path('', views.desktop),
@@ -41,5 +41,7 @@ urlpatterns = [
     path('preview/<path:template_name>', TemplatePreviewView.as_view(), name='template_preview'),
     path('api/user-status/', views.get_leo, name='get_leo'),
     path('api/call-status/', views.get_calls, name='get_calls'),
+    path('api/vcheck', views.api_get_vehicle_data, name='get_vehicle_data'),
+    path('subjectcheck/', subjectcheck, name='subjectcheck'),
     path('assign_officer/<int:call_id>/', assign_officer_to_call, name='assign_officer'),
 ]

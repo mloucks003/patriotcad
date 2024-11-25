@@ -1,0 +1,34 @@
+<!-- patriotcad/patriot_cadapp/templates/subjectcheck.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Check</title>
+</head>
+<body>
+    <h1>Subject Check</h1>
+    
+    <form method="POST" action="{% url 'subjectcheck' %}">
+        {% csrf_token %}
+        <label for="name">Enter Subject Name:</label>
+        <input type="text" id="name" name="name" required>
+        <button type="submit">Check</button>
+    </form>
+
+    {% if ss %}
+        <h2>Results:</h2>
+        <ul>
+            {% for suspect in ss %}
+                <li>{{ suspect.name }} - {{ suspect.alias }} - {{ suspect.address }}</li>
+            {% endfor %}
+        </ul>
+    {% elif messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

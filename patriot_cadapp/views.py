@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirec
 from django.views.generic import TemplateView
 from .models import *
 from django.contrib import messages
-from .models import User, Vehicle, Fire, Call
+from .models import User, Vehicle, Fire, Call, Suspect
 from django.http import JsonResponse
 from django.db.models import Q
 from time import gmtime, strftime
@@ -231,6 +231,37 @@ def vcheck(request):
             return HttpResponseRedirect('/vcheck')
             
     return render( request, "platecheck.html")
+
+def subjectcheck(request):
+    if 'term' in request.GET:
+        qs = Suspect.objects.filter(name__istartswith=request.GET.get('term'))
+        names = list()
+        for suspect in qs:
+            names.append(suspect.name)
+        return JsonResponse(names, safe=False)
+    
+    if request.method == 'POST':
+        name = request.POST["name"]
+
+        if name:
+            match = Suspect.objects.filter(Q(name__icontains=name))
+
+            if match:
+                return render(request, "subjectcheck.html", {"ss": match})
+
+            else:
+                messages.error(request, "No identification found. Please reference Citation System for citation information")
+        else:
+            return HttpResponseRedirect('/subjectcheck')
+    
+    return render(request, "subjectcheck.html")
+
+# Test
+def api_get_vehicle_data(request):
+    data = {
+        'vehicle': 'Truck'
+    }
+    return JsonResponse(data)
 
 def status(request, officerId):
     context= {
